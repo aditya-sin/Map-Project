@@ -1,0 +1,123 @@
+html, body {
+height: 100%;
+margin: 0;
+padding: 0;
+background: #ccc;
+}
+
+.container {
+    height: 100%;
+    position: relative;
+}
+
+.box {
+  background: #ccc;
+  border: 1px solid #999;
+  border-radius: 3px;
+  line-height: 35px;
+  padding: 10px 10px 30px 10px;
+  text-align: left;
+  width: 0;
+  display: none;
+  transition-duration: 0.2s;
+  transition-delay: 0.2s;
+}
+
+#map {
+  height: 100%;
+  left: 0;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+}
+
+#ham {
+  display: none;
+}
+
+.filter-box {
+  display: inline-block;
+  width: 100px;
+}
+
+#search {
+  height: 1.5em;
+  width: 100%;
+}
+
+.dropdown {
+  display: inline-block;
+  height: 26px;
+}
+
+.menuicon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  display: block;
+  cursor: pointer;
+  height: 21px;
+  width: 25px;
+  z-index: 2;
+}
+
+.menuicon span {
+    display: block;
+    top: 8px;
+    width: 25px;
+    height: 4px;
+    position: relative;
+    background-color: #8c8c8c;
+    transition-duration: 0;
+    transition-delay: 0.2s;
+}
+
+.second {
+  margin-top: 2px;
+}
+
+.third {
+  margin-top: 2px;
+}
+
+#ham:checked ~ .box {
+  position: absolute;
+  display: block;
+  width: 100%;
+  z-index: 1;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  top: 60%;
+  overflow: auto;
+}
+
+#ham:checked ~ .menuicon .second {
+    display: none;
+}
+
+#ham:checked ~ .menuicon .first {
+  transition-delay: 0,0.2s;
+  margin: 0;
+  transform: rotate(45deg);
+}
+
+#ham:checked ~ .menuicon .third {
+  transition-delay: 0,0.2s;
+  margin-top: -4px;
+  transform: rotate(-45deg);
+}
+
+#ham:checked ~ #map {
+  bottom: 20%;
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.item {
+  cursor: pointer;
+  width: 50%;
+}
