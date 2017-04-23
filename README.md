@@ -20,6 +20,7 @@ refresh.
 ### How to use this app
 * Download the project from github. After going in the desired directory,
 enter the following code in the terminal:
+'https://github.com/aditya-sin/Map-Project.git'
 * Click on the place name in the list or the maker in the map to see additional
 details about it.
 * To search for a place, start typing its name in the filter box. Marker and list
