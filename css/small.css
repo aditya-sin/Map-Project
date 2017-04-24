@@ -2,12 +2,10 @@ html, body {
 height: 100%;
 margin: 0;
 padding: 0;
-background: #ccc;
 }
 
-.container {
-    height: 100%;
-    position: relative;
+body {
+  position: relative;
 }
 
 .box {
@@ -24,10 +22,10 @@ background: #ccc;
 }
 
 #map {
-  height: 100%;
+  height: calc(100% - 31px);
   left: 0;
   position: absolute;
-  bottom: 0;
+  top: 0;
   right: 0;
 }
 
@@ -85,8 +83,7 @@ background: #ccc;
   display: block;
   width: 100%;
   z-index: 1;
-  position: absolute;
-  bottom: 0;
+  bottom: 31px;
   left: 0;
   top: 60%;
   overflow: auto;
@@ -120,4 +117,14 @@ background: #ccc;
 .item {
   cursor: pointer;
   width: 50%;
+}
+
+footer {
+  height: 26px;
+  padding-left: 10px;
+  padding-top: 5px;
+  border: 1px solid #999;
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }

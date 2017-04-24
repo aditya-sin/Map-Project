@@ -4,27 +4,26 @@ margin: 0;
 padding: 0;
 }
 
-.container {
-		height: 100%;
-		position: relative;
+body {
+	position: relative;
 }
 
 .box {
 	background: #ccc;
     border: 1px solid #999;
     border-radius: 3px;
-    height: calc(100% - 42px);
+    height: calc(100% - 26px);
     line-height: 35px;
-    padding: 10px 10px 30px 10px;
+    padding: 0 10px 0 10px;
     text-align: left;
     width: 252px;
 }
 
 #map {
-	height: 100%;
+	height: calc(100% - 26px);
 	left: 274px;
 	position: absolute;
-	bottom: 0;
+	top: 0;
 	right: 0;
 }
 
@@ -50,4 +49,16 @@ padding: 0;
 .dropdown {
 	display: inline-block;
 	height: 26px;
+}
+
+.err {
+	text-align: center;
+	background: #ccc;
+}
+
+footer {
+	height: 26px;
+	padding-left: 10px;
+	padding-top: 5px;
+	border: 1px solid #999;
 }

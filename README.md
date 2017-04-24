@@ -20,15 +20,18 @@ refresh.
 ### How to use this app
 * Download the project from github. After going in the desired directory,
 enter the following code in the terminal:
-'https://github.com/aditya-sin/Map-Project.git'
-* Click on the place name in the list or the maker in the map to see additional
-details about it.
+`git clone https://github.com/aditya-sin/Map-Project.git`
+* Go to the newly created directory: `cd Map-Project`
+* Open `index.html` to launch the app in the browser.
+* A map is displayed with markers for some locations. Also, a list is diplayed of same locations.
+* To see details of any location either click on the marker on the map or select
+the location in the list.
 * To search for a place, start typing its name in the filter box. Marker and list
 both get filtered out with each charcter written in the filter box.
 * Or select a type, and markers and list will be filtered.
 * Click on the Star to favorite locations.
 * Mobile users can view the list and filter option on clicking the hamburger menu
-icon located at the top right corner of the screen.
+icon located at the top right corner of the screen. List appears at the bottom of the page.
 
 English Wikipedia API is used to retrieve information about locations and is displayed
 in info window.

@@ -1,4 +1,14 @@
+function ErrorHandle(){
+	var M = document.getElementById('map');
+	M.style.background = '#ccc';
+	M.innerHTML = '<div class="err"><h2>Requested map could not be loaded</h2></div>';
+	var B = document.getElementsByClassName('box')[0];
+	B. innerHTML = 'No list to show!';
+	alert('Map could not be loaded! Please Try Again!');
+}
+
 var map;
+var infowindow;
 var markers = [];
 // Details of marker locations
 var locations = [
@@ -23,6 +33,11 @@ function initMap(){
           zoom: 12
 	});
 
+	// creating a new info window
+	infowindow = new google.maps.InfoWindow({
+		content:''
+	});
+
 	ko.applyBindings(new ViewModel());
 
 }
@@ -42,19 +57,13 @@ function getFromWiki(location,infowindow){
 
 	var content = location + ' <hr> Wikipedia Articles:<br>';
 
-	// If there is no response in 8 seconds, Error message is displayed
-	var wikitimeout = setTimeout(function(){
-		content += '<h4>Your request failed to load </h4> '
-        infowindow.setContent(content);
-    }, 8000);
-
 	// AJAX request to English Wikipedia API
-    var wikiurl = "https://en.wikipedia.org/w/api.php?action=opensearch&search="+location+"&format=json";
+    var wikiurl = 'https://en.wikipedia.org/w/api.php?action=opensearch&search='+location+'&format=json';
     $.ajax({
         url: wikiurl,
-        dataType: 'jsonp',
-        success: function(response){
-            articles = response[1];
+        dataType: 'jsonp'
+    	}).done(function(response){
+    		articles = response[1];
             if(articles.length == 0){
             	content += '<br>No Result found';
             	infowindow.setContent(content);
@@ -63,42 +72,27 @@ function getFromWiki(location,infowindow){
             	content += '<li><a href="https://en.wikipedia.org/wiki/'+articles[i]+'">'+articles[i]+'</a></li>';
                 infowindow.setContent(content);
             };
-
-        clearTimeout(wikitimeout);
-        }
-    })
+    	}).fail(function(){
+    		content += '<h4>Your request failed to load </h4> '
+        	infowindow.setContent(content);
+    	})
 }
 
 /**
-* @description Filters both list view and markers using string
+* @description Filters both list view and markers using search input and type
 * @param find - string which is to be searched
+* @param findtype - type which is to be searched
 * @param list - stores details of marker location
 */
-var filterList = function (find, list){
+var filterList = function (find, findtype, list){
 	for(var i=0; i<list.length; i++){
-		if (list[i].title().toUpperCase().indexOf(find.toUpperCase()) > -1){
+		if ((list[i].title().toUpperCase().indexOf(find.toUpperCase()) > -1 )
+			& (list[i].type === findtype[0] | findtype[0] === 'By Type')){
 			list[i].show(true);
-			markers[i].setMap(map);
+			markers[i].setVisible(true);
 		}else{
 			list[i].show(false);
-			markers[i].setMap(null);
-		}
-	}
-}
-
-/**
-* @description Filters both list view and markers using type
-* @param find - type selected which is to be searched
-* @param list - stores details of marker location
-*/
-var filterType = function (find, list){
-	for(var i=0; i<list.length; i++){
-		if (list[i].type() === find[0] | find[0] === 'By Type'){
-			list[i].show(true);
-			markers[i].setMap(map);
-		}else{
-			list[i].show(false);
-			markers[i].setMap(null);
+			markers[i].setVisible(false);
 		}
 	}
 }
@@ -107,16 +101,14 @@ var filterType = function (find, list){
 * @description - List contains details of location
 * @param data - contains details of location extracted from locations array
 * @param i - index number
-* @param win - infowindow of the marker of this location
 * @param favValue - Boolean- tells if the list item is favorite or not
 */
-var List = function(data, i, win, favValue){
+var List = function(data, i, favValue){
 	this.location = ko.observable(data.location);
 	this.title = ko.observable(data.title);
 	this.index = ko.observable(i);
-	this.infowin = ko.observable(win);
 	this.show = ko.observable(true);
-	this.type = ko.observable(data.type);
+	this.type = data.type;
 	this.fav = ko.observable(favValue);
 }
 
@@ -162,39 +154,39 @@ var ViewModel = function(){
         });
         bounds.extend(marker.position);
         markers.push(marker);
-		// creating a new info window
-		var infowindow = new google.maps.InfoWindow({
-			content:marker.title
-		});
+
 
 		// Opens and closes the info window and makes marker bounce
 		marker.addListener('click', function(){
+			map.panTo(this.getPosition());
 			toggleBounce(this);
+			infowindow.setContent(this.title);
 			infowindow.open(map,this);
 			getFromWiki(this.title,infowindow);
 		});
 
-		self.list_items.push(new List(locations[i],i,infowindow,self.favlist[i]));
+		self.list_items.push(new List(locations[i],i,self.favlist[i]));
 
 	}
 	map.fitBounds(bounds);
-
+	// Resizes map on change in window width
+	google.maps.event.addDomListener(window, 'resize', function() {
+  	map.fitBounds(bounds);
+  	});
 	// Animates the marker and show infowindow when an item is clicked in the list
 	this.itemClick = function(item){
+		map.panTo(markers[item.index()].getPosition());
 		toggleBounce(markers[item.index()]);
-		item.infowin().open(map,markers[item.index()]);
-		getFromWiki(item.title(),item.infowin());
+		infowindow.setContent(item.title());
+		infowindow.open(map,markers[item.index()]);
+		getFromWiki(item.title(),infowindow);
 	}
 
-	// Filters markers and list view by input string
-	this.filterVal = ko.observable("");
+	// Filters markers and list view by input string and type
+	this.filterVal = ko.observable('');
+	this.selected = ko.observableArray(['By Type']);
 	this.filter = function(){
-		filterList(self.filterVal(), self.list_items());
-	}
-	// Filters markers and list view by type
-	this.selected = ko.observableArray();
-	this.filterByType = function(){
-		filterType(self.selected(), self.list_items());
+		filterList(self.filterVal(), self.selected(), self.list_items());
 	}
 
 	// Toggles favorite and stores it in local storage

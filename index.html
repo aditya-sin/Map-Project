@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<link rel="stylesheet" media="screen and (min-width:500px)" href="css/style.css">
+	<link rel="stylesheet" media="screen and (max-width:500px)" href="css/small.css">
+</head>
+<body>
+
+	<input type="checkbox" id="ham">
+ 	<label class="menuicon" for="ham">
+    	<span class="first"></span>
+    	<span class="second"></span>
+    	<span class="third"></span>
+  	</label>
+	<aside class="box">
+	<i class="fa fa-filter" aria-hidden="true" style="color: #999966"></i>
+		<span class="filter-box">
+			<input type="text" id="search" data-bind="textInput: filterVal, event: {keyup: filter}, attr: {value: localStorage.getItem('filterbox')}" placeholder="By Place">
+		</span>
+		<select class="dropdown" data-bind="options: type, selectedOptions: selected, event: {change: filter}"></select>
+		<div class="lists">
+			<div class="list" data-bind="foreach: list_items">
+			<div class="item">
+				<span data-bind="text: title, click: $parent.itemClick, visible: show"></span>
+				<i data-bind="click: $parent.favorite, style: {color: fav()? 'yellow': 'white'}, visible: show" class="fa fa-star" aria-hidden="true"></i>
+			</div>
+			</div>
+		</div>
+	</aside>
+	<main id="map"></main>
+
+<footer>By: Aditya Singh &nbsp
+	<a href="https://github.com/aditya-sin/Map-Project"><i class="fa fa-github" aria-hidden="true"></i></a>
+</footer>
+
+<script src="js/libs/knockout-3.2.0.js"></script>
+<script src="js/libs/jquery.min.js"></script>
+<script src="js/script.js"></script>
+<script src="https://maps.googleapis.com/maps/api/js?callback=initMap"
+        async defer onerror="ErrorHandle()">
+    </script>
+</body>
+</html>
