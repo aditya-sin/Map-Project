@@ -22,7 +22,13 @@ refresh.
 enter the following code in the terminal:
 `git clone https://github.com/aditya-sin/Map-Project.git`
 * Go to the newly created directory: `cd Map-Project`
-* Open `index.html` to launch the app in the browser.
+* App can be launched in 2 ways:
+    * Open `index.html` directly by double clicking on it, or
+    * Run the app on `localhost:8080`. For this: 
+        * first, set up a local server. In the same directory run the following command: 
+            * `python -m SimpleHTTPServer 8080` for python 2, or 
+            * `python -m http.server 8080` for python 3
+        * next, open `http://localhost:8080/` in the browser.
 * A map is displayed with markers for some locations. Also, a list is diplayed of same locations.
 * To see details of any location either click on the marker on the map or select
 the location in the list.
