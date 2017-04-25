@@ -1,4 +1,4 @@
-function ErrorHandle(){
+function errorHandle(){
 	var M = document.getElementById('map');
 	M.style.background = '#ccc';
 	M.innerHTML = '<div class="err"><h2>Requested map could not be loaded</h2></div>';
@@ -45,7 +45,9 @@ function initMap(){
 // Makes the marker icon bounce twice
 function toggleBounce(marker){
 	marker.setAnimation(google.maps.Animation.BOUNCE);
-	window.setTimeout(function(){marker.setAnimation(null)},1400);
+	window.setTimeout(function(){
+		marker.setAnimation(null);
+	},1400);
 }
 
 /**
@@ -64,18 +66,18 @@ function getFromWiki(location,infowindow){
         dataType: 'jsonp'
     	}).done(function(response){
     		articles = response[1];
-            if(articles.length == 0){
+            if(articles.length === 0){
             	content += '<br>No Result found';
             	infowindow.setContent(content);
-            };
+            }
             for (var i = 0; i <articles.length; i++) {
             	content += '<li><a href="https://en.wikipedia.org/wiki/'+articles[i]+'">'+articles[i]+'</a></li>';
                 infowindow.setContent(content);
-            };
+            }
     	}).fail(function(){
-    		content += '<h4>Your request failed to load </h4> '
+    		content += '<h4>Your request failed to load </h4> ';
         	infowindow.setContent(content);
-    	})
+    	});
 }
 
 /**
@@ -86,8 +88,7 @@ function getFromWiki(location,infowindow){
 */
 var filterList = function (find, findtype, list){
 	for(var i=0; i<list.length; i++){
-		if ((list[i].title().toUpperCase().indexOf(find.toUpperCase()) > -1 )
-			& (list[i].type === findtype[0] | findtype[0] === 'By Type')){
+		if ((list[i].title().toUpperCase().indexOf(find.toUpperCase()) > -1 )&& (list[i].type === findtype[0] || findtype[0] === 'By Type')){
 			list[i].show(true);
 			markers[i].setVisible(true);
 		}else{
@@ -95,7 +96,7 @@ var filterList = function (find, findtype, list){
 			markers[i].setVisible(false);
 		}
 	}
-}
+};
 
 /**
 * @description - List contains details of location
@@ -110,14 +111,14 @@ var List = function(data, i, favValue){
 	this.show = ko.observable(true);
 	this.type = data.type;
 	this.fav = ko.observable(favValue);
-}
+};
 
 var ViewModel = function(){
 	var self = this;
 	// It will store all the List items
 	this.list_items = ko.observableArray([]);
 	// Array of types
-	this.type = ko.observableArray(['By Type','Tourist Spot', 'Recreational', 'Administrative', 'Movies','Markets', 'Food', 'Others' ])
+	this.type = ko.observableArray(['By Type','Tourist Spot', 'Recreational', 'Administrative', 'Movies','Markets', 'Food', 'Others' ]);
 	// Setting the value of favVal in local storage as per initial conditions
 	if(!(localStorage.getItem('favVal'))){
 		this.favlist = ko.observableArray([false,false,false,false,false,false,false,false,false,false]);
@@ -180,14 +181,14 @@ var ViewModel = function(){
 		infowindow.setContent(item.title());
 		infowindow.open(map,markers[item.index()]);
 		getFromWiki(item.title(),infowindow);
-	}
+	};
 
 	// Filters markers and list view by input string and type
 	this.filterVal = ko.observable('');
 	this.selected = ko.observableArray(['By Type']);
 	this.filter = function(){
 		filterList(self.filterVal(), self.selected(), self.list_items());
-	}
+	};
 
 	// Toggles favorite and stores it in local storage
 	this.favorite = function(){
@@ -198,8 +199,8 @@ var ViewModel = function(){
 		}
 		self.list_items().forEach(function(elem,i){
 			self.favlist[i] = elem.fav();
-		},self)
+		},self);
 		localStorage.setItem('favVal',JSON.stringify({val: self.favlist}));
-	}
-}
+	};
+};
 
