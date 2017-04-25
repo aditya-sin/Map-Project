@@ -65,7 +65,7 @@ function getFromWiki(location,infowindow){
         url: wikiurl,
         dataType: 'jsonp'
     	}).done(function(response){
-    		articles = response[1];
+    		var articles = response[1];
             if(articles.length === 0){
             	content += '<br>No Result found';
             	infowindow.setContent(content);
@@ -147,7 +147,7 @@ var ViewModel = function(){
 			iconstyle = 'http://maps.google.com/mapfiles/kml/pal2/icon32.png';
 		}
 		// Creating markers
-		marker = new google.maps.Marker({
+		var marker = new google.maps.Marker({
           position: locations[i].location,
           title:locations[i].title,
           map: map,
